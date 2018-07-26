@@ -1,0 +1,28 @@
+buildscript {
+
+}
+
+plugins {
+	id "net.ltgt.apt-idea" version "0.17"
+}
+
+group 'net.snowyhollows.mcgregor'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "a.b.c.Main"
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+	mavenLocal()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+	compile "net.snowyhollows.mcgregor:mcgregor-generator:1.0-SNAPSHOT"
+	annotationProcessor "net.snowyhollows.mcgregor:mcgregor-generator:1.0-SNAPSHOT"
+}
