@@ -3,7 +3,7 @@
 
 	<nav class="navbar navbar-dark bg-dark">
 		<div class="navbar-brand" >
-			Kontakty: {{ model.getImie() }} {{ model.getNazwisko() }}
+			Osoba: <b>{{ model.getImie() }} {{ model.getNazwisko() }}</b>
 		</div>
 	</nav>
 
@@ -11,7 +11,7 @@
 		<thead class="thead-dark">
 			<tr>
 				<td>Kontakt</td>
-				<td>Typ</td>
+				<td>Typ</td>bh
 				<td>Zmień</td>
 				<td>Zmień typ</td>
 				<td>Usuń</td>
@@ -20,7 +20,7 @@
 		<tbody x-list="{{ model.getKontakty() }}" x-variable="kontakt">
 			<tr>
 				<td>
-				{{ kontakt.getZawartosc()}}
+				{{ kontakt.getZawartosc() }}
 				</td>
 				<td>
 					{{ kontakt.getTyp() }}

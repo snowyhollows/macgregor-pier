@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 
 import com.sun.net.httpserver.*;
 
+import net.snowyhollows.mcgregor.Event;
 import net.snowyhollows.mcgregor.tag.Component;
 import net.snowyhollows.mcgregor.tag.Container;
-import net.snowyhollows.mcgregor.tag.Event;
 import net.snowyhollows.mcgregor.tag.GenericTag;
 
 /**
@@ -34,13 +34,14 @@ import net.snowyhollows.mcgregor.tag.GenericTag;
 public class Main {
 	public static void main(String[] args)
 			throws IOException {
-		WidokOsoby widokOsoby = new WidokOsobyImpl();
-
-		final Osoba osoba = new Osoba("Jan", "Kowalski", new ArrayList<>(Arrays.asList (
+		Osoba osoba = new Osoba("Jan", "Kowalski", new ArrayList<>(Arrays.asList(
 				new Kontakt("660423770", Kontakt.TypKontaktu.MOBILE),
 				new Kontakt("fdreger@kowalski.net", Kontakt.TypKontaktu.EMAIL),
 				new Kontakt("http://google.com", Kontakt.TypKontaktu.WWW)
 		)));
+
+		WidokOsoby component = new WidokOsobyTemplated();
+		component.setModel(osoba);
 
 		HttpServer server = HttpServer.create(new InetSocketAddress(8080), 1);
 		server.createContext("/", exchange -> {
@@ -54,9 +55,6 @@ public class Main {
 		server.createContext("/do", exchange -> {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			OutputStreamWriter writer = new OutputStreamWriter(baos);
-			Component component = widokOsoby.build(null, osoba, null);
-			mark(component, "0", null);
-
 			String[] path = exchange.getRequestURI().getPath().split("/");
 
 			if (path.length > 3) {
@@ -67,20 +65,18 @@ public class Main {
 
 				Event e = new Event(target, value);
 				if (eventName.equals("click")) {
-					mark(current, "0", c -> {
+					component.visit(c -> {
 						if (target.equals(c.getKey())) {
-							((GenericTag)c).getOnclick().onEvent(e);
+							((GenericTag) c).getOnclick().onEvent(e);
 						}
 					});
 				} else if (eventName.equals("change")) {
-					mark(current, "0", c -> {
+					component.visit(c -> {
 						if (target.equals(c.getKey())) {
-							((GenericTag)c).getOnchange().onEvent(e);
+							((GenericTag) c).getOnchange().onEvent(e);
 						}
 					});
 				}
-				component = widokOsoby.build(null, osoba, null);
-				mark(component, "0", null);
 			}
 
 			component.render(writer);
@@ -98,14 +94,16 @@ public class Main {
 	public static void mark(Component c, String key, Consumer<Component> consumer) {
 		c.setKey(key);
 		if (consumer != null) {
-			consumer.accept(c);
-		}
-		if (c instanceof Container) {
-			List<Component> children = ((Container) c).getChildren();
-			int idx = 0;
-			if (children != null) {
-				for (Component child : children) {
-					mark(child, key + ":" + idx++, consumer);
+			if (consumer != null) {
+				consumer.accept(c);
+			}
+			if (c instanceof Container) {
+				List<Component> children = ((Container) c).getChildren();
+				int idx = 0;
+				if (children != null) {
+					for (Component child : children) {
+						mark(child, key + ":" + idx++, consumer);
+					}
 				}
 			}
 		}

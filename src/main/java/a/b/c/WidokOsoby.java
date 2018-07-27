@@ -9,11 +9,19 @@
  */
 package a.b.c;
 
-import net.snowyhollows.mcgregor.api.Tree;
-import net.snowyhollows.mcgregor.api.View;
-import net.snowyhollows.mcgregor.tag.Component;
+import net.snowyhollows.mcgregor.api.ComponentBuilder;
+import net.snowyhollows.mcgregor.tag.PureContainer;
 
-@Tree
-public interface WidokOsoby extends View<Component, Osoba, Context> {
+@ComponentBuilder
+abstract class WidokOsoby extends PureContainer  {
 
+	Osoba model;
+
+	public Osoba getModel() {
+		return model;
+	}
+
+	public void setModel(Osoba model) {
+		this.model = model;
+	}
 }
