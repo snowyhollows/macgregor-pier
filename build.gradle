@@ -1,7 +1,3 @@
-buildscript {
-
-}
-
 plugins {
 	id "net.ltgt.apt-idea" version "0.17"
 }
@@ -9,10 +5,19 @@ plugins {
 group 'net.snowyhollows.mcgregor'
 version '1.0-SNAPSHOT'
 
+apply plugin: 'maven-publish'
 apply plugin: 'java'
 apply plugin: 'application'
 
 mainClassName = "a.b.c.Main"
+
+publishing {
+	publications {
+		pub(MavenPublication) {
+			from components.java
+		}
+	}
+}
 
 sourceCompatibility = 1.8
 
@@ -23,6 +28,8 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+	compileOnly "javax:javaee-api:7.0"
 	compile "net.snowyhollows.mcgregor:mcgregor-generator:1.0-SNAPSHOT"
 	annotationProcessor "net.snowyhollows.mcgregor:mcgregor-generator:1.0-SNAPSHOT"
+	compile 'com.google.code.gson:gson:2.8.5'
 }
