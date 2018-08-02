@@ -49,6 +49,7 @@ public abstract class MacServlet<T extends Component> extends HttpServlet {
                 switch (macEvent.type) {
                     case CLICK: ((GenericTag)c).getOnclick().onEvent(e); break;
                     case CHANGE: ((GenericTag)c).getOnchange().onEvent(e); break;
+	                case DBCLICK: ((GenericTag)c).getOndbclick().onEvent(e); break;
                 }
             }
         });

@@ -12,7 +12,7 @@ state.then(_ => {
 
 function on_event(e) {
     var source = e.srcElement;
-    if (source.dataset.events && source.dataset.events.indexOf(e.type) != -1) {
+    if (source.dataset.events && source.dataset.events.indexOf(":" + e.type) != -1) {
         var event = JSON.stringify({
             type: e.type.toUpperCase(),
             source: source.dataset.key,
